@@ -10,6 +10,7 @@ export default function App() {
       }))
     )
   )
+  const [cursor, setCursor] = React.useState([3, 2])
 
   React.useEffect(() => {
     function handleKeyDown(e) {
@@ -26,9 +27,15 @@ export default function App() {
 
   return (
     <>
-      {wordTries.map(word => (
+      {wordTries.map((word, wordIndex) => (
         <div className='word'>
-          {word.map(letterObj => <span className='letter'>{letterObj.letter}</span>)}
+          {word.map((letterObj, letterIndex) => {
+            const isCursor = wordIndex == cursor[0] && letterIndex == cursor[1]
+            const classString = isCursor ? 'letter cursor' : 'letter'
+            return (
+              <span className={classString}>{letterObj.letter}</span>
+            )
+          })}
         </div>
       ))}
     </>
