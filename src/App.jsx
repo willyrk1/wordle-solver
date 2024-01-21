@@ -10,7 +10,11 @@ export default function App() {
       }))
     )
   )
-  const [cursor, setCursor] = React.useState([3, 2])
+  const [cursor, setCursor] = React.useState([0, 0])
+
+  function handleLetterClick(wordIndex, letterIndex) {
+    setCursor([wordIndex, letterIndex])
+  }
 
   React.useEffect(() => {
     function handleKeyDown(e) {
@@ -33,7 +37,9 @@ export default function App() {
             const isCursor = wordIndex == cursor[0] && letterIndex == cursor[1]
             const classString = isCursor ? 'letter cursor' : 'letter'
             return (
-              <span className={classString}>{letterObj.letter}</span>
+              <span className={classString} onClick={() => handleLetterClick(wordIndex, letterIndex)}>
+                {letterObj.letter}
+              </span>
             )
           })}
         </div>
