@@ -13,6 +13,11 @@ export default function App() {
 
   return (
     <>
+      {wordTries.map(word => (
+        <div>
+          {word.map(letterObj => <span>{letterObj.letter}</span>)}
+        </div>
+      ))}
     </>
   )
 }
