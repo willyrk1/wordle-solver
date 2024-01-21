@@ -1,0 +1,24 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+
+  .word {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .letter {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #000;
+      font-size: 32px;
+      font-weight: 700;
+      height: 60px;
+      width: 60px;
+      margin: 5px;
+    }
+  }
+}

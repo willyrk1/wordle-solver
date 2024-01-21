@@ -1,6 +1,6 @@
 import React from 'react'
 import { evalTypes } from './constants'
-import './App.css'
+import './App.scss'
 
 export default function App() {
   const [wordTries, setWordTries] = React.useState(
@@ -11,11 +11,24 @@ export default function App() {
     )
   )
 
+  React.useEffect(() => {
+    function handleKeyDown(e) {
+      console.log(e.keyCode);
+    }
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    // Don't forget to clean up
+    return function cleanup() {
+      document.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [])
+
   return (
     <>
       {wordTries.map(word => (
-        <div>
-          {word.map(letterObj => <span>{letterObj.letter}</span>)}
+        <div className='word'>
+          {word.map(letterObj => <span className='letter'>{letterObj.letter}</span>)}
         </div>
       ))}
     </>
