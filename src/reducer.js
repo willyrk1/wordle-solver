@@ -1,4 +1,5 @@
 import { clueTypes } from "./constants"
+import fullDictionary from "./fullDictionary"
 
 export const reducerActions = {
   setCursor: 'setCursor',
@@ -14,6 +15,15 @@ export const initReducer = {
   ),
   cursor: [0, 0],
   selectedClueType: clueTypes.none,
+  validWords: fullDictionary,
+}
+
+function toListOfValidWords(dictionary, wordClue) {
+  return dictionary
+}
+
+function getValidWords(wordClues) {
+  return wordClues.reduce(toListOfValidWords, fullDictionary)
 }
 
 export default function reducer(state, action) {
@@ -40,6 +50,7 @@ export default function reducer(state, action) {
         ...state,
         cursor: action.cursor,
         wordClues: newWordClues,
+        validWords: getValidWords(newWordClues),
       }
     }
     
@@ -68,6 +79,7 @@ export default function reducer(state, action) {
         ...state,
         cursor: getNewCursor(),
         wordClues: newWordClues,
+        validWords: getValidWords(newWordClues),
       }
     }
 

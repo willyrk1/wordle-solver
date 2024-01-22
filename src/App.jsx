@@ -64,6 +64,11 @@ export default function App() {
           )
         })}
       </div>
+      <div className='valid-words'>
+        <ul>
+          {state.validWords.map(word => <li>{word}</li>)}
+        </ul>
+      </div>
     </div>
   )
 }
