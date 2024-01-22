@@ -35,14 +35,14 @@ export default function App() {
     <div className='container'>
       <div className='word-list'>
         {state.wordClues.map((wordClue, wordClueIndex) => (
-          <div className='word'>
+          <div className='word-clue'>
             {wordClue.map((letterClue, letterClueIndex) => {
               const isCursor = wordClueIndex === state.cursor[0] && letterClueIndex === state.cursor[1]
               const cursorClass = isCursor ? ' cursor' : ''
               const clueTypeClass = letterClue.letter ? letterClue.clueType : ''
               return (
                 <span
-                  className={`letter ${clueTypeClass}${cursorClass}`}
+                  className={`letter-clue ${clueTypeClass}${cursorClass}`}
                   onClick={() => handleLetterClick(wordClueIndex, letterClueIndex)}
                 >
                   {letterClue.letter}
