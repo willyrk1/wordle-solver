@@ -1,24 +1,19 @@
 import React from 'react'
-import { evalTypes } from './constants'
 import './App.scss'
+import reducer, { initReducer, reducerActions } from './reducer'
 
 export default function App() {
-  const [wordTries, setWordTries] = React.useState(
-    [...Array(6)].map(_dummy =>
-      [...Array(5)].map(_dummy2 => ({
-        letter: '', evalType: evalTypes.none
-      }))
-    )
-  )
-  const [cursor, setCursor] = React.useState([0, 0])
+  const [state, dispatch] = React.useReducer(reducer, initReducer)
 
   function handleLetterClick(wordIndex, letterIndex) {
-    setCursor([wordIndex, letterIndex])
+    dispatch({ type: reducerActions.setCursor, cursor: [wordIndex, letterIndex] })
   }
 
   React.useEffect(() => {
     function handleKeyDown(e) {
-      console.log(e.keyCode);
+      if (e.key.length === 1 && /[a-z]/.test(e.key)) {
+        dispatch({ type: reducerActions.keyPressed, letter: e.key })
+      }
     }
 
     document.addEventListener('keydown', handleKeyDown);
@@ -31,10 +26,10 @@ export default function App() {
 
   return (
     <>
-      {wordTries.map((word, wordIndex) => (
+      {state.words.map((word, wordIndex) => (
         <div className='word'>
           {word.map((letterObj, letterIndex) => {
-            const isCursor = wordIndex == cursor[0] && letterIndex == cursor[1]
+            const isCursor = wordIndex === state.cursor[0] && letterIndex === state.cursor[1]
             const classString = isCursor ? 'letter cursor' : 'letter'
             return (
               <span className={classString} onClick={() => handleLetterClick(wordIndex, letterIndex)}>
