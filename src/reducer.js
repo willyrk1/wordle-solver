@@ -1,80 +1,80 @@
-import { evalTypes } from "./constants"
+import { clueTypes } from "./constants"
 
 export const reducerActions = {
   setCursor: 'setCursor',
   keyPressed: 'keyPressed',
-  evalTypeSelected: 'evalTypeSelected',
+  clueTypeSelected: 'clueTypeSelected',
 }
 
 export const initReducer = {
-  words: [...Array(6)].map(_dummy =>
+  wordClues: [...Array(6)].map(_dummy =>
     [...Array(5)].map(_dummy2 => ({
-      letter: '', evalType: evalTypes.none
+      letter: '', clueType: clueTypes.none
     }))
   ),
   cursor: [0, 0],
-  selectedEvalType: evalTypes.none,
+  selectedClueType: clueTypes.none,
 }
 
 export default function reducer(state, action) {
-  function copyWordList(cursor, newLetter) {
-    const newWords = []
+  function copyWordClues() {
+    const newWordClues = []
     
-    state.words.forEach(word => {
-      const newWord = []
-      word.forEach(letter => {
-        newWord.push({ letter: letter.letter, evalType: letter.evalType })
+    state.wordClues.forEach(clue => {
+      const newWordClue = []
+      clue.forEach(letterClue => {
+        newWordClue.push({ letter: letterClue.letter, clueType: letterClue.clueType })
       })
-      newWords.push(newWord)
+      newWordClues.push(newWordClue)
     })
 
-    return newWords
+    return newWordClues
   }
 
   switch (action.type) {
     case reducerActions.setCursor: {
-      const newWords = copyWordList()
-      newWords[action.cursor[0]][action.cursor[1]].evalType = state.selectedEvalType
+      const newWordClues = copyWordClues()
+      newWordClues[action.cursor[0]][action.cursor[1]].clueType = state.selectedClueType
 
       return {
         ...state,
         cursor: action.cursor,
-        words: newWords,
+        wordClues: newWordClues,
       }
     }
     
     case reducerActions.keyPressed: {
       function getNewCursor() {
-        const [wordIndex, letterIndex] = state.cursor
+        const [wordClueIndex, letterClueIndex] = state.cursor
 
         // If not at the end of the word, go to the next letter.
-        if (letterIndex < 4) {
-          return [wordIndex, letterIndex + 1]
+        if (letterClueIndex < 4) {
+          return [wordClueIndex, letterClueIndex + 1]
         }
 
         // If last letter but not the last word, go to first letter of the next word.
-        if (wordIndex < 5) {
-          return [wordIndex + 1, 0]
+        if (wordClueIndex < 5) {
+          return [wordClueIndex + 1, 0]
         }
 
         // Last letter of last word. Just stay here.
         return state.cursor
       }
 
-      const newWords = copyWordList()
-      newWords[state.cursor[0]][state.cursor[1]].letter = action.letter
+      const newWordClues = copyWordClues()
+      newWordClues[state.cursor[0]][state.cursor[1]].letter = action.letter
 
       return {
         ...state,
         cursor: getNewCursor(),
-        words: newWords,
+        wordClues: newWordClues,
       }
     }
 
-    case reducerActions.evalTypeSelected: {
+    case reducerActions.clueTypeSelected: {
       return {
         ...state,
-        selectedEvalType: action.evalType,
+        selectedClueType: action.clueType,
       }
     }
 

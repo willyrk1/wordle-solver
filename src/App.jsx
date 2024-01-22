@@ -1,19 +1,19 @@
 import React from 'react'
 import './App.scss'
 import reducer, { initReducer, reducerActions } from './reducer'
-import { evalTypes } from './constants'
+import { clueTypes } from './constants'
 
-const evalTypesList = [evalTypes.none, evalTypes.match, evalTypes.partial]
+const clueTypesList = [clueTypes.none, clueTypes.match, clueTypes.partial]
 
 export default function App() {
   const [state, dispatch] = React.useReducer(reducer, initReducer)
 
-  function handleLetterClick(wordIndex, letterIndex) {
-    dispatch({ type: reducerActions.setCursor, cursor: [wordIndex, letterIndex] })
+  function handleLetterClick(wordClueIndex, letterClueIndex) {
+    dispatch({ type: reducerActions.setCursor, cursor: [wordClueIndex, letterClueIndex] })
   }
 
-  function handleEvalTypeClick(evalType) {
-    dispatch({ type: reducerActions.evalTypeSelected, evalType })
+  function handleClueTypeClick(clueType) {
+    dispatch({ type: reducerActions.clueTypeSelected, clueType })
   }
 
   React.useEffect(() => {
@@ -34,32 +34,32 @@ export default function App() {
   return (
     <div className='container'>
       <div className='word-list'>
-        {state.words.map((word, wordIndex) => (
+        {state.wordClues.map((wordClue, wordClueIndex) => (
           <div className='word'>
-            {word.map((letterObj, letterIndex) => {
-              const isCursor = wordIndex === state.cursor[0] && letterIndex === state.cursor[1]
+            {wordClue.map((letterClue, letterClueIndex) => {
+              const isCursor = wordClueIndex === state.cursor[0] && letterClueIndex === state.cursor[1]
               const cursorClass = isCursor ? ' cursor' : ''
-              const evalType = letterObj.letter ? letterObj.evalType : ''
+              const clueTypeClass = letterClue.letter ? letterClue.clueType : ''
               return (
                 <span
-                  className={`letter ${evalType}${cursorClass}`}
-                  onClick={() => handleLetterClick(wordIndex, letterIndex)}
+                  className={`letter ${clueTypeClass}${cursorClass}`}
+                  onClick={() => handleLetterClick(wordClueIndex, letterClueIndex)}
                 >
-                  {letterObj.letter}
+                  {letterClue.letter}
                 </span>
               )
             })}
           </div>
         ))}
       </div>
-      <div className='eval-type-chooser'>
-        {evalTypesList.map(evalType => {
-          const selectedClass = (evalType === state.selectedEvalType) ? ' selected' : ''
+      <div className='clue-type-chooser'>
+        {clueTypesList.map(clueType => {
+          const selectedClass = (clueType === state.selectedClueType) ? ' selected' : ''
           return (
             <div
-              className={`eval-type ${evalType}${selectedClass}`}
-              onClick={() => handleEvalTypeClick(evalType)}
-              key={evalType}
+              className={`clue-type ${clueType}${selectedClass}`}
+              onClick={() => handleClueTypeClick(clueType)}
+              key={clueType}
             />
           )
         })}
