@@ -3,6 +3,7 @@ import { evalTypes } from "./constants"
 export const reducerActions = {
   setCursor: 'setCursor',
   keyPressed: 'keyPressed',
+  evalTypeSelected: 'evalTypeSelected',
 }
 
 export const initReducer = {
@@ -11,50 +12,41 @@ export const initReducer = {
       letter: '', evalType: evalTypes.none
     }))
   ),
-  cursor: [0, 0]
+  cursor: [0, 0],
+  selectedEvalType: evalTypes.none,
 }
 
 export default function reducer(state, action) {
+  function copyWordList(cursor, newLetter) {
+    const newWords = []
+    
+    state.words.forEach(word => {
+      const newWord = []
+      word.forEach(letter => {
+        newWord.push({ letter: letter.letter, evalType: letter.evalType })
+      })
+      newWords.push(newWord)
+    })
+
+    return newWords
+  }
+
   switch (action.type) {
     case reducerActions.setCursor: {
+      const newWords = copyWordList()
+      newWords[action.cursor[0]][action.cursor[1]].evalType = state.selectedEvalType
+
       return {
         ...state,
         cursor: action.cursor,
+        words: newWords,
       }
     }
     
     case reducerActions.keyPressed: {
-      const { words, cursor } = state
-
-      const [wordIndex, letterIndex] = cursor
-
-      function getNewWordList() {
-        // COOL WAY....
-        // const newWords = [
-        //   ...words.slice(0, wordIndex),
-        //   [
-        //     ...words[wordIndex].slice(0, letterIndex),
-        //     {letter: "P", evalType: evalTypes.none},
-        //     ...words[wordIndex].slice(letterIndex + 1),
-        //   ],
-        //   ...words.slice(wordIndex + 1)
-        // ]
-
-        // BEGINNER WAY  ;)
-        const newWords = []
-        words.forEach(word => {
-          const newWord = []
-          word.forEach(letter => {
-            newWord.push({ letter: letter.letter, evalType: letter.evalType })
-          })
-          newWords.push(newWord)
-        })
-        newWords[wordIndex][letterIndex].letter = action.letter
-
-        return newWords
-      }
-
       function getNewCursor() {
+        const [wordIndex, letterIndex] = state.cursor
+
         // If not at the end of the word, go to the next letter.
         if (letterIndex < 4) {
           return [wordIndex, letterIndex + 1]
@@ -66,15 +58,26 @@ export default function reducer(state, action) {
         }
 
         // Last letter of last word. Just stay here.
-        return cursor
+        return state.cursor
       }
+
+      const newWords = copyWordList()
+      newWords[state.cursor[0]][state.cursor[1]].letter = action.letter
 
       return {
         ...state,
         cursor: getNewCursor(),
-        words: getNewWordList(),
+        words: newWords,
       }
     }
+
+    case reducerActions.evalTypeSelected: {
+      return {
+        ...state,
+        selectedEvalType: action.evalType,
+      }
+    }
+
     default:
       return state
   }

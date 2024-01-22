@@ -1,6 +1,6 @@
 
 export const evalTypes = {
-  none: 'noMatch',
+  none: 'no-match',
   match: 'match',
-  partial: 'partialMatch',
+  partial: 'partial-match',
 }
