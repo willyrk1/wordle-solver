@@ -28,34 +28,51 @@ export default function reducer(state, action) {
 
       const [wordIndex, letterIndex] = cursor
 
-      // COOL WAY....
-      // const newWords = [
-      //   ...words.slice(0, wordIndex),
-      //   [
-      //     ...words[wordIndex].slice(0, letterIndex),
-      //     {letter: "P", evalType: evalTypes.none},
-      //     ...words[wordIndex].slice(letterIndex + 1),
-      //   ],
-      //   ...words.slice(wordIndex + 1)
-      // ]
+      function getNewWordList() {
+        // COOL WAY....
+        // const newWords = [
+        //   ...words.slice(0, wordIndex),
+        //   [
+        //     ...words[wordIndex].slice(0, letterIndex),
+        //     {letter: "P", evalType: evalTypes.none},
+        //     ...words[wordIndex].slice(letterIndex + 1),
+        //   ],
+        //   ...words.slice(wordIndex + 1)
+        // ]
 
-      // BEGINNER WAY  ;)
-      const newWords = []
-      words.forEach(word => {
-        const newWord = []
-        word.forEach(letter => {
-          newWord.push({ letter: letter.letter, evalType: letter.evalType })
+        // BEGINNER WAY  ;)
+        const newWords = []
+        words.forEach(word => {
+          const newWord = []
+          word.forEach(letter => {
+            newWord.push({ letter: letter.letter, evalType: letter.evalType })
+          })
+          newWords.push(newWord)
         })
-        newWords.push(newWord)
-      })
-      newWords[wordIndex][letterIndex].letter = action.letter
+        newWords[wordIndex][letterIndex].letter = action.letter
 
-      const newCursor = cursor[1] === 4 ? [cursor[0] + 1, 0] : [cursor[0], cursor[1] + 1]
+        return newWords
+      }
+
+      function getNewCursor() {
+        // If not at the end of the word, go to the next letter.
+        if (letterIndex < 4) {
+          return [wordIndex, letterIndex + 1]
+        }
+
+        // If last letter but not the last word, go to first letter of the next word.
+        if (wordIndex < 5) {
+          return [wordIndex + 1, 0]
+        }
+
+        // Last letter of last word. Just stay here.
+        return cursor
+      }
 
       return {
         ...state,
-        cursor: newCursor,
-        words: newWords,
+        cursor: getNewCursor(),
+        words: getNewWordList(),
       }
     }
     default:
