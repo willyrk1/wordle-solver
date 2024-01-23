@@ -9,11 +9,11 @@ export default function App() {
   const [state, dispatch] = React.useReducer(reducer, initReducer)
 
   function handleLetterClick(wordClueIndex, letterClueIndex) {
-    dispatch({ type: reducerActions.setCursor, cursor: [wordClueIndex, letterClueIndex] })
+    dispatch({ type: reducerActions.setCursor, wordClueIndex, letterClueIndex })
   }
 
-  function handleClueTypeClick(clueType) {
-    dispatch({ type: reducerActions.clueTypeSelected, clueType })
+  function handleClueTypeClick(wordClueIndex, letterClueIndex, clueType) {
+    dispatch({ type: reducerActions.clueTypeSelected, wordClueIndex, letterClueIndex, clueType })
   }
 
   React.useEffect(() => {
@@ -41,28 +41,29 @@ export default function App() {
               const cursorClass = isCursor ? ' cursor' : ''
               const clueTypeClass = letterClue.letter ? letterClue.clueType : ''
               return (
-                <span
+                <div
                   className={`letter-clue ${clueTypeClass}${cursorClass}`}
                   onClick={() => handleLetterClick(wordClueIndex, letterClueIndex)}
                 >
                   {letterClue.letter}
-                </span>
+
+                  <div className='clue-type-chooser'>
+                    {clueTypesList.map(clueType => {
+                      const selectedClass = (clueType === state.selectedClueType) ? ' selected' : ''
+                      return (
+                        <div
+                          className={`clue-type ${clueType}${selectedClass}`}
+                          onClick={() => handleClueTypeClick(wordClueIndex, letterClueIndex, clueType)}
+                          key={clueType}
+                        />
+                      )
+                    })}
+                  </div>
+                </div>
               )
             })}
           </div>
         ))}
-      </div>
-      <div className='clue-type-chooser'>
-        {clueTypesList.map(clueType => {
-          const selectedClass = (clueType === state.selectedClueType) ? ' selected' : ''
-          return (
-            <div
-              className={`clue-type ${clueType}${selectedClass}`}
-              onClick={() => handleClueTypeClick(clueType)}
-              key={clueType}
-            />
-          )
-        })}
       </div>
       <div className='valid-words'>
         <ul>

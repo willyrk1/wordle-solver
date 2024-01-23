@@ -14,7 +14,6 @@ export const initReducer = {
     }))
   ),
   cursor: [0, 0],
-  selectedClueType: clueTypes.none,
   validWords: fullDictionary,
 }
 
@@ -81,14 +80,9 @@ export default function reducer(state, action) {
 
   switch (action.type) {
     case reducerActions.setCursor: {
-      const newWordClues = copyWordClues()
-      newWordClues[action.cursor[0]][action.cursor[1]].clueType = state.selectedClueType
-
       return {
         ...state,
-        cursor: action.cursor,
-        wordClues: newWordClues,
-        validWords: getValidWords(newWordClues),
+        cursor: [action.wordClueIndex, action.letterClueIndex]
       }
     }
     
@@ -122,9 +116,13 @@ export default function reducer(state, action) {
     }
 
     case reducerActions.clueTypeSelected: {
+      const newWordClues = copyWordClues()
+      newWordClues[action.wordClueIndex][action.letterClueIndex].clueType = action.clueType
+
       return {
         ...state,
-        selectedClueType: action.clueType,
+        wordClues: newWordClues,
+        validWords: getValidWords(newWordClues),
       }
     }
 
