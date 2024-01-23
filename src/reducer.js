@@ -18,12 +18,50 @@ export const initReducer = {
   validWords: fullDictionary,
 }
 
+function toRegexPortion({ letter, clueType }) {
+  return clueType === clueTypes.match ? letter : `[^${letter}]`
+}
+
+function toLetterCounts(letterCounts, { letter, clueType }) {
+  if (!letterCounts[letter]) {
+    letterCounts[letter] = { count: 0, exact: false }
+  }
+  if (clueType === clueTypes.none) {
+    letterCounts[letter].exact = true
+  }
+  else {
+    letterCounts[letter].count++
+  }
+  return letterCounts
+}
+
+function toCountFiltered(dictionary, [letter, { count, exact }]) {
+  const countRegex = new RegExp((count === 0)
+    ? `^[^${letter}]*$`
+    : `^(?:[^${letter}]*${letter}[^${letter}]*){${count}${exact ? '' : ','}}`
+  )
+  const filtered = dictionary.filter(word => countRegex.test(word))
+  return filtered
+}
+
 function toListOfValidWords(dictionary, wordClue) {
-  return dictionary
+  const positionRegex = new RegExp(wordClue.map(toRegexPortion).join(''))
+  const filteredByPosition = dictionary.filter(word => positionRegex.test(word))
+
+  const letterCounts = wordClue.reduce(toLetterCounts, {})
+
+  const filteredByCount = Object.entries(letterCounts).reduce(toCountFiltered, filteredByPosition)
+  return filteredByCount
+}
+
+function whereEveryLetterClueFilled(wordClue) {
+  return wordClue.every(({ letter }) => letter)
 }
 
 function getValidWords(wordClues) {
-  return wordClues.reduce(toListOfValidWords, fullDictionary)
+  return wordClues
+    .filter(whereEveryLetterClueFilled)
+    .reduce(toListOfValidWords, fullDictionary)
 }
 
 export default function reducer(state, action) {
