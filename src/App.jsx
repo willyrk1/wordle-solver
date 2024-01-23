@@ -33,6 +33,7 @@ export default function App() {
 
   return (
     <div className='container'>
+      <div class="header">W<span class="o">o</span>rd<span class="l">l</span>e Sol<span class="v">v</span>e<span class="r">r</span></div>
       <div className='word-list'>
         {state.wordClues.map((wordClue, wordClueIndex) => (
           <div className='word-clue'>
