@@ -1,164 +1,108 @@
 #root {
-  // max-width: 1280px;
   width: 100%;
   margin: 0 auto;
   text-align: center;
+}
 
-  .container {
-    display: flex;    
-    justify-content: center;
-    align-items: flex-start;
-    width: 100%;
-    flex-wrap: wrap;
-    row-gap: 20px;
+.header {
+  border-bottom: 1px solid darkgray;
+  width: 100%;
+  height: 60px;
+  font-family: "Clear Sans","Helvetica Neue",Arial,sans-serif;
+  font-weight: 700;
+  font-size: 35px;
+}
 
-    .word-list {
-      justify-content: center;
-    }
+.o, .v { color: #6aaa64; }
+.l, .r { color: #c9b458; }
 
-    .valid-words ul {
-      list-style-type: none;
-      margin: 0;
-      height: 455px;
-      width: 75px;
-      overflow-y: scroll;
-      overflow-x: hidden;
-      padding: 10px;
-      font-family: "Helvetica";
-      font-size: 20px;
-    }
+.content {
+  display: flex;    
+  justify-content: center;
+}
+
+.word-list {
+  justify-content: center;
+}
+
+.valid-words ul {
+  list-style-type: none;
+  margin: 0;
+  height: 455px;
+  width: 75px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding: 10px;
+  font-family: "Helvetica";
+  font-size: 20px;
+}
+
+.word-clue {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.letter-clue {
+  border: 2px solid lightgray;
+  font-size: 2rem;
+  font-weight: bold;
+  height: 72px;
+  width: 72px;
+  margin: 2px;
+  text-transform: uppercase;
+  color: #fff;
+  cursor: pointer;
+  position: relative;
+  font-family: "Helvetica";
+  border-radius: 2px;
+
+  &.cursor {
+    border: 3px solid #000;
+    height: 70px;
+    width: 70px;
+  }
+}
+
+.exact-letter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 53px;
+}
+
+.no-match, .partial-match, .match {
+  border: none;
+  height: 76px;
+  width: 76px;
   
-    .header {
-      border-bottom: 1px solid darkgray;
-      width: 100%;
-      height: 60px;
-      font-family: "Clear Sans","Helvetica Neue",Arial,sans-serif;
-      font-weight: 700;
-      font-size: 35px;
+  .exact-letter {
+    height: 55px;
   }
+}
 
-  .word-clue {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.cursor .exact-letter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  margin-bottom: 2px;
+}
 
-    .letter-clue {
-      align-items: center;
-      justify-content: center;
-      border: 2px solid lightgray;
-      font-size: 2rem;
-      font-weight: bold;
-      height: 72px;
-      width: 72px;
-      margin: 2px;
-      text-transform: uppercase;
-      color: #fff;
-      cursor: pointer;
-      position: relative;
-      font-family: "Helvetica";
-      border-radius: 2px;
+.no-match { background-color: #787c7e; }
+.partial-match { background-color: #c9b458; }
+.match { background-color: #6aaa64; }
 
-        .exact-letter {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 53px;
-        }
+.clue-type-chooser {
+  display: flex;
+  justify-content: center;
+}
 
-        &.no-match {
-          border: none;
-          height: 76px;
-          width: 76px;
-          
-          .exact-letter {
-            height: 55px;
-          }
-        }
-        
-        &.partial-match {
-          border: none;
-          height: 76px;
-          width: 76px;
-
-          .exact-letter {
-            height: 55px;
-          }
-        }
-        
-        &.match {
-          border: none;
-          height: 76px;
-          width: 76px;
-
-          .exact-letter {
-            height: 55px;
-          }
-        }
-      
-      &.cursor {
-        border: 3px solid #000;
-        height: 70px;
-        width: 70px;
-        border-radius: 2px;
-        margin: 2px;
-
-        .exact-letter {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 50px;
-          margin-bottom: 2px;
-        }
-
-        .clue-type-chooser {
-          bottom: 1;
-        }
-      }
-    }
-  }
-
-  .no-match {
-    background-color: #787c7e;
-  }
-  
-  .partial-match {
-    background-color: #c9b458;
-  }
-  
-  .match {
-    background-color: #6aaa64;
-  }
-
-  .clue-type-chooser {
-    display: flex;
-    bottom: 1px;
-    justify-content: center;
-  }
-
-  .clue-type {
-    height: 15px;
-    width: 15px;
-    margin: 1px;
-    border: 1px solid lightgray;
-    cursor: pointer;
-    border-radius: 2px;
-  }
-
-    .o {
-      color: #6aaa64;
-    }
-
-    .l {
-      color: #c9b458;
-    }
-
-    .v {
-      color: #6aaa64;
-    }
-
-    .r {
-      color: #c9b458;
-    }
-
-  }
+.clue-type {
+  height: 15px;
+  width: 15px;
+  margin: 1px;
+  border: 1px solid lightgray;
+  cursor: pointer;
+  border-radius: 2px;
 }

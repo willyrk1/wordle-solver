@@ -32,45 +32,47 @@ export default function App() {
   }, [])
 
   return (
-    <div className='container'>
-      <div class="header">W<span class="o">o</span>rd<span class="l">l</span>e Sol<span class="v">v</span>e<span class="r">r</span></div>
-      <div className='word-list'>
-        {state.wordClues.map((wordClue, wordClueIndex) => (
-          <div className='word-clue'>
-            {wordClue.map((letterClue, letterClueIndex) => {
-              const isCursor = wordClueIndex === state.cursor[0] && letterClueIndex === state.cursor[1]
-              const cursorClass = isCursor ? ' cursor' : ''
-              const clueTypeClass = letterClue.letter ? letterClue.clueType : ''
-              return (
-                <div
-                  className={`letter-clue ${clueTypeClass}${cursorClass}`}
-                  onClick={() => handleLetterClick(wordClueIndex, letterClueIndex)}
-                >
-                  <div className='exact-letter'>{letterClue.letter}</div>
+    <>
+      <div className="header">W<span className="o">o</span>rd<span className="l">l</span>e Sol<span className="v">v</span>e<span className="r">r</span></div>
+      <div className='content'>
+        <div className='word-list'>
+          {state.wordClues.map((wordClue, wordClueIndex) => (
+            <div className='word-clue'>
+              {wordClue.map((letterClue, letterClueIndex) => {
+                const isCursor = wordClueIndex === state.cursor[0] && letterClueIndex === state.cursor[1]
+                const cursorClass = isCursor ? ' cursor' : ''
+                const clueTypeClass = letterClue.letter ? letterClue.clueType : ''
+                return (
+                  <div
+                    className={`letter-clue ${clueTypeClass}${cursorClass}`}
+                    onClick={() => handleLetterClick(wordClueIndex, letterClueIndex)}
+                  >
+                    <div className='exact-letter'>{letterClue.letter}</div>
 
-                  <div className='clue-type-chooser'>
-                    {clueTypesList.map(clueType => {
-                      const selectedClass = (clueType === state.selectedClueType) ? ' selected' : ''
-                      return (
-                        <div
-                          className={`clue-type ${clueType}${selectedClass}`}
-                          onClick={() => handleClueTypeClick(wordClueIndex, letterClueIndex, clueType)}
-                          key={clueType}
-                        />
-                      )
-                    })}
+                    <div className='clue-type-chooser'>
+                      {clueTypesList.map(clueType => {
+                        const selectedClass = (clueType === state.selectedClueType) ? ' selected' : ''
+                        return (
+                          <div
+                            className={`clue-type ${clueType}${selectedClass}`}
+                            onClick={() => handleClueTypeClick(wordClueIndex, letterClueIndex, clueType)}
+                            key={clueType}
+                          />
+                        )
+                      })}
+                    </div>
                   </div>
-                </div>
-              )
-            })}
-          </div>
-        ))}
+                )
+              })}
+            </div>
+          ))}
+        </div>
+        <div className='valid-words'>
+          <ul>
+            {state.validWords.map(word => <li>{word}</li>)}
+          </ul>
+        </div>
       </div>
-      <div className='valid-words'>
-        <ul>
-          {state.validWords.map(word => <li>{word}</li>)}
-        </ul>
-      </div>
-    </div>
+    </>
   )
 }
