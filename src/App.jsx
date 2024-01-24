@@ -46,7 +46,7 @@ export default function App() {
                   className={`letter-clue ${clueTypeClass}${cursorClass}`}
                   onClick={() => handleLetterClick(wordClueIndex, letterClueIndex)}
                 >
-                  {letterClue.letter}
+                  <div className='exact-letter'>{letterClue.letter}</div>
 
                   <div className='clue-type-chooser'>
                     {clueTypesList.map(clueType => {
