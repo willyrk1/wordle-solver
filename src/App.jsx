@@ -18,7 +18,10 @@ export default function App() {
 
   React.useEffect(() => {
     function handleKeyDown(e) {
-      if (e.key.length === 1 && /[a-z]/.test(e.key)) {
+      if (e.key.toUpperCase() === 'BACKSPACE') {
+        dispatch({ type: reducerActions.backspacePressed })
+      }
+      else if (e.key.length === 1 && /[a-z]/.test(e.key)) {
         dispatch({ type: reducerActions.keyPressed, letter: e.key })
       }
     }
