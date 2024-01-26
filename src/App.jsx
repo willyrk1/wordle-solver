@@ -8,22 +8,30 @@ const clueTypesList = [clueTypes.none, clueTypes.match, clueTypes.partial]
 export default function App() {
   const [state, dispatch] = React.useReducer(reducer, initReducer)
 
-  function handleLetterClick(wordClueIndex, letterClueIndex) {
+  function handleLetterClueClick(wordClueIndex, letterClueIndex) {
     dispatch({ type: reducerActions.setCursor, wordClueIndex, letterClueIndex })
   }
 
-  function handleClueTypeClick(wordClueIndex, letterClueIndex, clueType) {
-    dispatch({ type: reducerActions.clueTypeSelected, wordClueIndex, letterClueIndex, clueType })
+  function handleClueTypeClick(clueType) {
+    dispatch({ type: reducerActions.clueTypeSelected, clueType })
+  }
+
+  function handleLetterClueTypeClick(wordClueIndex, letterClueIndex, clueType) {
+    dispatch({ type: reducerActions.letterClueTypeSelected, wordClueIndex, letterClueIndex, clueType })
+  }
+
+  function handleKeyPressed(key) {
+    if (key.toUpperCase() === 'BACKSPACE' || key === '<') {
+      dispatch({ type: reducerActions.backspacePressed })
+    }
+    else if (key.length === 1 && /[a-z]/.test(key)) {
+      dispatch({ type: reducerActions.keyPressed, letter: key })
+    }
   }
 
   React.useEffect(() => {
     function handleKeyDown(e) {
-      if (e.key.toUpperCase() === 'BACKSPACE') {
-        dispatch({ type: reducerActions.backspacePressed })
-      }
-      else if (e.key.length === 1 && /[a-z]/.test(e.key)) {
-        dispatch({ type: reducerActions.keyPressed, letter: e.key })
-      }
+      handleKeyPressed(e.key)
     }
 
     document.addEventListener('keydown', handleKeyDown);
@@ -38,7 +46,7 @@ export default function App() {
     <>
       <div className="header">W<span className="o">o</span>rd<span className="l">l</span>e Sol<span className="v">v</span>e<span className="r">r</span></div>
       <div className='content'>
-        <div className='word-list'>
+        <div className='word-clue-list'>
           {state.wordClues.map((wordClue, wordClueIndex) => (
             <div className='word-clue'>
               {wordClue.map((letterClue, letterClueIndex) => {
@@ -48,7 +56,7 @@ export default function App() {
                 return (
                   <div
                     className={`letter-clue ${clueTypeClass}${cursorClass}`}
-                    onClick={() => handleLetterClick(wordClueIndex, letterClueIndex)}
+                    onClick={() => handleLetterClueClick(wordClueIndex, letterClueIndex)}
                   >
                     <div className='exact-letter'>{letterClue.letter}</div>
 
@@ -58,7 +66,7 @@ export default function App() {
                         return (
                           <div
                             className={`clue-type ${clueType}${selectedClass}`}
-                            onClick={() => handleClueTypeClick(wordClueIndex, letterClueIndex, clueType)}
+                            onClick={() => handleLetterClueTypeClick(wordClueIndex, letterClueIndex, clueType)}
                             key={clueType}
                           />
                         )
@@ -75,6 +83,35 @@ export default function App() {
             {state.validWords.map(word => <li>{word}</li>)}
           </ul>
         </div>
+      </div>
+      <div className={`keyboard ${state.selectedClueType}`}>
+        <p>1. Choose A Color...</p>
+        <div className='clue-type-chooser'>
+          {clueTypesList.map(clueType => {
+            const selectedClass = (clueType === state.selectedClueType) ? ' selected' : ''
+            return (
+              <div
+                className={`clue-type ${clueType}${selectedClass}`}
+                onClick={() => handleClueTypeClick(clueType)}
+                key={clueType}
+              />
+            )
+          })}
+        </div>
+        <p>2. Choose A Letter...</p>
+        {['QWERTYUIOP<', 'ASDFGHJKL', 'ZXCVBNM'].map(line => (
+          <div key={line} className='keyboard-line'>
+            {line.split('').map(letter => (
+              <button
+                key={letter}
+                onClick={() => handleKeyPressed(letter.toLowerCase())}
+                className='keyboard-key'
+              >
+                {letter}
+              </button>
+            ))}
+          </div>
+        ))}
       </div>
     </>
   )
