@@ -35,19 +35,27 @@ $size-break: 500px;
   }
 }
 
-.valid-words ul {
-  list-style-type: none;
-  margin: 0;
-  height: 480px;
-  @media (max-width: $size-break) {
-    height: 360px;
-  }
-  width: 75px;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  padding: 0 10px;
+.valid-words {
   font-family: "Helvetica";
   font-size: 20px;
+
+  .count {
+    border-bottom: solid 1px #000;
+    margin: 0 10px;
+  }
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+    height: 445px;
+    @media (max-width: $size-break) {
+      height: 325px;
+    }
+    width: 75px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding: 0 10px;
+  }
 }
 
 .word-clue {
@@ -130,10 +138,6 @@ $size-break: 500px;
   margin: 20px auto 0;
   max-width: 495px;
 
-  &.no-match .keyboard-key { background-color: $no-match; border-color: $no-match; }
-  &.partial-match .keyboard-key { background-color: $partial-match; border-color: $partial-match; }
-  &.match .keyboard-key { background-color: $match; background-color: $match; }
-
   p {
     margin: 20px 0 5px;
   }
@@ -142,26 +146,33 @@ $size-break: 500px;
     display: flex;
     justify-content: center;
     margin: 0 5px 15px;
-
-    .no-match { background-color: $no-match; }
-    .partial-match { background-color: $partial-match; }
-    .match { background-color: $match; }
   }
 
   .clue-type {
     height: 40px;
     width: 33%;
     margin: 0 2px;
-    border: 1px solid lightgray;
+    border: 3px solid;
     cursor: pointer;
     border-radius: 2px;
+
+    &.selected {
+      &.no-match, &.partial-match, &.match {
+        border-color: #000;
+      }
+    }
+
+    &.no-match { background-color: $no-match; border-color: $no-match; }
+    &.partial-match { background-color: $partial-match; border-color: $partial-match; }
+    &.match { background-color: $match; border-color: $match; }
   }
 }
 
 .keyboard-key {
-  height: 30px;
+  height: 35px;
   color: #fff;
-  margin: 2px;
-  background-color: white;
+  margin: 3px;
+  background-color: $no-match;
+  border-color: $no-match;
   font-weight: 700;
 }

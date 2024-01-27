@@ -9,7 +9,7 @@ export default function App() {
   const [state, dispatch] = React.useReducer(reducer, initReducer)
 
   function handleLetterClueClick(wordClueIndex, letterClueIndex) {
-    dispatch({ type: reducerActions.setCursor, wordClueIndex, letterClueIndex })
+    dispatch({ type: reducerActions.letterClueClicked, wordClueIndex, letterClueIndex })
   }
 
   function handleClueTypeClick(clueType) {
@@ -66,7 +66,10 @@ export default function App() {
                         return (
                           <div
                             className={`clue-type ${clueType}${selectedClass}`}
-                            onClick={() => handleLetterClueTypeClick(wordClueIndex, letterClueIndex, clueType)}
+                            onClick={e => {
+                              handleLetterClueTypeClick(wordClueIndex, letterClueIndex, clueType)
+                              e.stopPropagation()
+                            }}
                             key={clueType}
                           />
                         )
@@ -79,13 +82,14 @@ export default function App() {
           ))}
         </div>
         <div className='valid-words'>
+          <div className='count'>{state.validWords.length.toLocaleString()}</div>
           <ul>
             {state.validWords.map(word => <li>{word}</li>)}
           </ul>
         </div>
       </div>
       <div className={`keyboard ${state.selectedClueType}`}>
-        <p>1. Choose A Color...</p>
+        <p>Choose A Color...</p>
         <div className='clue-type-chooser'>
           {clueTypesList.map(clueType => {
             const selectedClass = (clueType === state.selectedClueType) ? ' selected' : ''
@@ -98,7 +102,7 @@ export default function App() {
             )
           })}
         </div>
-        <p>2. Choose A Letter...</p>
+        <p>Choose A Letter...</p>
         {['QWERTYUIOP<', 'ASDFGHJKL', 'ZXCVBNM'].map(line => (
           <div key={line} className='keyboard-line'>
             {line.split('').map(letter => (

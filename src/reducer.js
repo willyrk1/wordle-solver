@@ -2,7 +2,7 @@ import { clueTypes } from "./constants"
 import fullDictionary from "./fullDictionary"
 
 export const reducerActions = {
-  setCursor: 'setCursor',
+  letterClueClicked: 'letterClueClicked',
   keyPressed: 'keyPressed',
   backspacePressed: 'backspacePressed',
   clueTypeSelected: 'clueTypeSelected',
@@ -22,10 +22,14 @@ export const initReducer = {
 
 export default function reducer(state, action) {
   switch (action.type) {
-    case reducerActions.setCursor: {
+    case reducerActions.letterClueClicked: {
+      const newWordClues = copyWordClues(state.wordClues)
+      newWordClues[action.wordClueIndex][action.letterClueIndex].clueType = state.selectedClueType
+
       return {
         ...state,
-        cursor: [action.wordClueIndex, action.letterClueIndex]
+        wordClues: newWordClues,
+        validWords: getValidWords(newWordClues),
       }
     }
     
@@ -33,10 +37,7 @@ export default function reducer(state, action) {
       const [wordClueIndex, letterClueIndex] = state.cursor
 
       const newWordClues = copyWordClues(state.wordClues)
-      newWordClues[wordClueIndex][letterClueIndex] = {
-        letter: action.letter,
-        clueType: state.selectedClueType
-      }
+      newWordClues[wordClueIndex][letterClueIndex].letter = action.letter
 
       return {
         ...state,
