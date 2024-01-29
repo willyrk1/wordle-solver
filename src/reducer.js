@@ -122,7 +122,7 @@ function toLetterCounts(letterCounts, { letter, clueType }) {
 function toCountFiltered(dictionary, [letter, { count, exact }]) {
   const countRegex = new RegExp((count === 0)
     ? `^[^${letter}]*$`
-    : `^(?:[^${letter}]*${letter}[^${letter}]*){${count}${exact ? '' : ','}}`
+    : `^(?:[^${letter}]*${letter}[^${letter}]*){${count}${exact ? '' : ','}}$`
   )
   return dictionary.filter(word => countRegex.test(word))
 }
