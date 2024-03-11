@@ -139,7 +139,7 @@ $size-break: 500px;
   max-width: 495px;
 
   p {
-    margin: 20px 0 5px;
+    margin: 10px 0 5px;
   }
 
   .clue-type-chooser {
@@ -169,9 +169,10 @@ $size-break: 500px;
 }
 
 .keyboard-key {
-  height: 35px;
+  height: 36px;
+  width: 36px;
   color: #fff;
-  margin: 3px;
+  margin: 2px;
   background-color: $no-match;
   border-color: $no-match;
   font-weight: 700;
