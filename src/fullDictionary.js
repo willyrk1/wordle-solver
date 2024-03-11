@@ -2314,4 +2314,20 @@ youth
 zebra
 zesty
 zonal
-`.split('\n').filter(v => v)
+`.split('\n').filter(v => v).map(addLetterCounts)
+
+function addLetterCounts(word) {
+  return { word, letterCounts: [...word].reduce(toLetterCounts, {})}
+}
+
+function toLetterCounts(letterCounts, letter) {
+  if (letter) {
+    if (!letterCounts[letter]) {
+      letterCounts[letter] = 1
+    }
+    else {
+      letterCounts[letter]++
+    }
+  }
+  return letterCounts
+}

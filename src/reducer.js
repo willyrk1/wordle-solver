@@ -18,7 +18,7 @@ export const initReducer = {
   ),
   cursor: [0, 0],
   selectedClueType: clueTypes.none,
-  validWords: fullDictionary,
+  validWords: fullDictionary.map(({ word}) => word),
 }
 
 function defaultClueType(wordClues, letter, letterIndex) {
@@ -146,16 +146,15 @@ function toLetterCounts(letterCounts, { letter, clueType }) {
 }
 
 function toCountFiltered(dictionary, [letter, { count, exact }]) {
-  const countRegex = new RegExp((count === 0)
-    ? `^[^${letter}]*$`
-    : `^(?:[^${letter}]*${letter}[^${letter}]*){${count}${exact ? '' : ','}}$`
-  )
-  return dictionary.filter(word => countRegex.test(word))
+  return dictionary.filter(({ letterCounts }) => {
+    const testCount = letterCounts[letter] || 0
+    return exact ? testCount === count : testCount >= count
+  })
 }
 
 function toListOfValidWords(dictionary, wordClue) {
   const positionRegex = new RegExp(wordClue.map(toRegexPortion).join(''))
-  const filteredByPosition = dictionary.filter(word => positionRegex.test(word))
+  const filteredByPosition = dictionary.filter(({ word }) => positionRegex.test(word))
 
   const letterCounts = wordClue.reduce(toLetterCounts, {})
 
@@ -170,6 +169,7 @@ function getValidWords(wordClues) {
   return wordClues
     .filter(whereSomeLetterClueFilled)
     .reduce(toListOfValidWords, fullDictionary)
+    .map(({ word }) => word)
 }
 
 function copyWordClues(wordClues) {
