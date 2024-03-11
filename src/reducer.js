@@ -7,6 +7,7 @@ export const reducerActions = {
   backspacePressed: 'backspacePressed',
   clueTypeSelected: 'clueTypeSelected',
   letterClueTypeSelected: 'letterClueTypeSelected',
+  validWordClicked: 'validWordClicked',
 }
 
 export const initReducer = {
@@ -18,6 +19,13 @@ export const initReducer = {
   cursor: [0, 0],
   selectedClueType: clueTypes.none,
   validWords: fullDictionary,
+}
+
+function defaultClueType(wordClues, letter, letterIndex) {
+  const alreadyGreen = wordClues
+    .map(wordClue => wordClue[letterIndex])
+    .some(letterClue => letterClue.letter === letter && letterClue.clueType === clueTypes.match)
+  return alreadyGreen ? clueTypes.match : clueTypes.none
 }
 
 export default function reducer(state, action) {
@@ -32,12 +40,30 @@ export default function reducer(state, action) {
         validWords: getValidWords(newWordClues),
       }
     }
+
+    case reducerActions.validWordClicked: {
+      const [wordClueIndex] = state.cursor
+
+      const newWordClues = copyWordClues(state.wordClues)
+      action.word.split('').forEach((letter, letterIndex) => {
+        const clueType = defaultClueType(state.wordClues, letter, letterIndex)
+        newWordClues[wordClueIndex][letterIndex] = { letter, clueType }
+      })
+
+      return {
+        ...state,
+        cursor: incrementCursor([wordClueIndex, 4]),
+        wordClues: newWordClues,
+        validWords: getValidWords(newWordClues)
+      }
+    }
     
     case reducerActions.keyPressed: {
       const [wordClueIndex, letterClueIndex] = state.cursor
 
       const newWordClues = copyWordClues(state.wordClues)
-      newWordClues[wordClueIndex][letterClueIndex].letter = action.letter
+      const clueType = defaultClueType(state.wordClues, action.letter, letterClueIndex)
+      newWordClues[wordClueIndex][letterClueIndex] = { letter: action.letter, clueType }
 
       return {
         ...state,

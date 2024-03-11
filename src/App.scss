@@ -56,6 +56,10 @@ $size-break: 500px;
     overflow-x: hidden;
     padding: 0 10px;
   }
+
+  li {
+    cursor: pointer;
+  }
 }
 
 .word-clue {

@@ -20,6 +20,10 @@ export default function App() {
     dispatch({ type: reducerActions.letterClueTypeSelected, wordClueIndex, letterClueIndex, clueType })
   }
 
+  function handleValidWordClick(word) {
+    dispatch({ type: reducerActions.validWordClicked, word })
+  }
+
   function handleKeyPressed(key) {
     if (key.toUpperCase() === 'BACKSPACE' || key === '<') {
       dispatch({ type: reducerActions.backspacePressed })
@@ -84,7 +88,9 @@ export default function App() {
         <div className='valid-words'>
           <div className='count'>{state.validWords.length.toLocaleString()}</div>
           <ul>
-            {state.validWords.map(word => <li>{word}</li>)}
+            {state.validWords.map(word => (
+              <li key={word} onClick={() => handleValidWordClick(word)}>{word}</li>
+            ))}
           </ul>
         </div>
       </div>
